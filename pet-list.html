@@ -1,0 +1,29 @@
+<div class="slider-body">
+    <div class="slider-header">
+        <h2 class="title">My loved ones</h2>
+        <h2 class="link-button close" ng-click="$ctrl.closeSlider()">X</h2>
+    </div>
+
+    <div class="slider-content">
+        <div class="list-container">
+            <div class="loved-pet" ng-repeat="pet in $ctrl.pets track by $index">
+                <div class="picture-container">
+                    <div class="pet-picture" ng-style="{'background-image': $ctrl.getImage($index) }">
+
+                    </div>
+                </div>
+                <div class="info-container">
+                    <span class="pet-name">{{pet.name}}</span>
+                    <span class="pet-info">{{pet.info}}</span>
+                    <span class="pet-description">{{pet.description}}</span>
+                    <div class="separator" ng-if="!$last"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="slider-footer">
+    <button class="button close" ng-click="$ctrl.closeSlider()">Close</button>
+</div>
+
+

@@ -1,0 +1,58 @@
+.tile-container {
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	width: 440px;
+	height: 440px;
+}
+
+.tile {
+	display: flex;
+	font-size: 40px;
+	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+	color: white;
+	font-weight: bold;
+	align-items: center;
+	justify-content: center;
+	margin: 5px;
+	width: 100px;
+	height: 100px;
+}
+
+.tile-0 {
+	background-color: #8d8d8d;
+}
+
+.tile-2 {
+	color: darkslategrey;
+	background-color: lightgrey;
+}
+
+.tile-4 {
+	color: darkslategrey;
+	background-color: #d3ceb0;
+}
+
+.tile-8 {
+	background-color: #ffc177;
+}
+
+.tile-16 {
+	background-color: #da7222;
+}
+
+.tile-32 {
+	background-color: #9b4437;
+}
+
+.tile-64 {
+	background-color: #b3031e;
+}
+
+.tile-128 {
+	 background-color: #546980;
+}
+
+.tile-256 {
+	background-color: #254380;
+}

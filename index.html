@@ -1,22 +1,38 @@
-<html ng-app='2048'>
-	<head>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="script.js"></script>
-		<link href="style.css" rel="stylesheet" type="text/css"/>
-	</head>
-	<body>
-		<div ng-controller='testController as ctrl'>
-			{{ctrl.message}}
-			SCORE : {{ctrl.score}}
-			<div class='tile-container'>
-				<div ng-repeat='tile in ctrl.tiles track by tile.index'
-						 class='tile'
-						 ng-class="ctrl.getClass(tile.value)"
-						 ng-bind='ctrl.getLabel(tile.value)'>
-				</div>
-			</div>
-		</div>
-	</body>
+<html ng-app='myApp'>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div ng-controller="MainController as $ctrl" class="main-container">
+    <header class="header">
+        <div class="logo menu-item" ng-click="$ctrl.backToHome()">LOGO</div>
+        <div class="menu-right">
+            <div class="menu-item my-pets" ng-click="$ctrl.toggleList()" ng-if="$ctrl.likedPets.length">
+                PETS
+            </div>
+        </div>
+
+    </header>
+    <menu class="slider"
+          ng-if="$ctrl.isMenuOpen">
+    </menu>
+
+    <home on-pet-like="$ctrl.addLikedPet(pet)"
+          toggle-list="$ctrl.toggleList()">
+    </home>
+
+    <pet-list class="slider"
+              ng-show="$ctrl.isPetListOpen"
+              on-close="$ctrl.toggleList()"
+              pets="$ctrl.likedPets">
+    </pet-list>
+
+    <footer></footer>
+</div>
+</body>
 </html>

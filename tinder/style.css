@@ -285,7 +285,7 @@ button:active {
 }
 
 .pet-hand {
-    background-image: url('tinder/images/pet-hand.png');
+    background-image: url('images/pet-hand.png');
     left: 9px;
     top: 10px;
     height: 45px;
@@ -293,7 +293,7 @@ button:active {
 }
 
 .cancel {
-    background-image: url('tinder/images/cancel.png');
+    background-image: url('images/cancel.png');
     left: 10px;
     top: 14px;
     opacity: 0.7;

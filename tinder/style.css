@@ -21,6 +21,7 @@ html, body {
     width: 100%;
     position: fixed;
     top: 0;
+    z-index: 2;
     display: flex;
     justify-content: space-between;
     height: 50px;
@@ -236,15 +237,6 @@ home {
     padding: 10px;
     font-size: 14px;
 }
-
-/*.pet-information > p {
-    color: white;
-    margin-top: 7px;
-    padding: 10px;
-    overflow: hidden;
-    font-size: 14px;
-    bottom: 0;
-}*/
 
 .button-detail {
     display: none;

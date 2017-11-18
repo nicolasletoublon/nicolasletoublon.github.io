@@ -157,7 +157,9 @@ home {
 
 .tile-container {
     display: flex;
+    position: relative;
     height: 100%;
+    width: 100%;
     flex-direction: column;
     border-radius: 3px;
     box-sizing: border-box;
@@ -166,6 +168,10 @@ home {
 
 .tile-header {
     padding: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .empty-pets {
@@ -187,20 +193,24 @@ home {
 }
 
 .tile-body {
-    flex: 1;
     height: 100%;
-    display: flex;
+    box-sizing: border-box;
+    padding-bottom: 110px;
+    padding-top: 82px;
 }
 
 .tile-footer {
     display: flex;
     justify-content: center;
     padding: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .pet-image-container {
     height: 100%;
-    width: 100%;
 }
 
 .pet-image {
@@ -215,21 +225,26 @@ home {
 }
 
 .pet-information {
+    color: white;
     position: absolute;
     height: 25%;
     background: rgba(0, 0, 0, 0.3);
     width: 100%;
     bottom: 0;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
 }
 
-.pet-information > p {
+/*.pet-information > p {
     color: white;
     margin-top: 7px;
     padding: 10px;
     overflow: hidden;
     font-size: 14px;
     bottom: 0;
-}
+}*/
 
 .button-detail {
     display: none;

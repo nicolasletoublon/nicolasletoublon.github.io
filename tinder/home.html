@@ -5,11 +5,13 @@
             <span class="subtitle">{{$ctrl.pet.info}}</span>
         </div>
         <div class="tile-body">
-            <div class="pet-image" ng-style="{'background-image': $ctrl.getImage() }">
-                <div class="pet-information">
-                    <p>{{$ctrl.pet.description}}</p>
+            <div class="pet-image-container">
+                <div class="pet-image" ng-style="{'background-image': $ctrl.getImage() }">
+                    <div class="pet-information">
+                        <p>{{$ctrl.pet.description}}</p>
+                    </div>
+                    <button class="button-detail">+</button>
                 </div>
-                <button class="button-detail">+</button>
             </div>
             <div class="pet-description">
 

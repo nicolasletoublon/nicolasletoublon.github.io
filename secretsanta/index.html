@@ -37,8 +37,8 @@
         </div>
         <button id="add-member-button" type="button" onclick="onAddMember()" class="btn btn-primary form-group">Add</button>
         <div class="form-group">
-            <button id="see-list-button" onclick="onSeeListClicked()" type="button" class="btn btn-primary hidden">See the list</button>
-            <button id="reset-list-button" onclick="onResetListClicked()" type="button" class="btn btn-warning hidden">Reset the list</button>
+            <button id="see-list-button" onclick="onSeeList()" type="button" class="btn btn-primary hidden">See the list</button>
+            <button id="reset-list-button" onclick="onResetList()" type="button" class="btn btn-warning hidden">Reset the list</button>
             <br/>
             <ul class="family-list-container hidden"></ul>
         </div>
@@ -58,12 +58,13 @@
             <select class="form-control" id="select-name-draw" onchange="onChangeNameSelected()"></select>
             <p id="picked-person-text"></p>
         </div>
-        <button type="button" class="btn btn-primary" onclick="checkPickedPerson()">Check</button>
+        <button type="button" class="btn btn-primary" onclick="onCheckPickedPerson()">Check</button>
     </div>
 </section>
 <footer>
 
 </footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="main.js"></script>
 
 </body>

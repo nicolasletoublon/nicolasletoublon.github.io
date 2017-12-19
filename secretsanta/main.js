@@ -1,204 +1,210 @@
-var familyMembers = [],
-	nameInput = document.querySelector('#name-member-input'),
-	isSingleCheckbox = document.querySelector('#member-is-single-checkbox'),
-	partnerNameInput = document.querySelector('#partner-name-member-input'),
-	nameDrawSelect = document.querySelector('#select-name-draw'),
-	seeListButton = document.querySelector('#see-list-button'),
-	resetListButton = document.querySelector('#reset-list-button'),
-	pickedPersonText = document.querySelector('#picked-person-text'),
+function onLoad() {
+	var familyMembers = [],
+		alertTimeOut,
+		resultTimeOut,
+		nameInput = document.querySelector('#name-member-input'),
+		isSingleCheckbox = document.querySelector('#member-is-single-checkbox'),
+		partnerNameInput = document.querySelector('#partner-name-member-input'),
+		nameDrawSelect = document.querySelector('#select-name-draw'),
+		seeListButton = document.querySelector('#see-list-button'),
+		resetListButton = document.querySelector('#reset-list-button'),
+		pickedPersonText = document.querySelector('#picked-person-text'),
 
-	checkContainer = document.querySelector('.check-container'),
-	launchContainer = document.querySelector('.launch-container'),
-	familyListContainer = document.querySelector('.family-list-container'),
-	alertContainer = document.querySelector('#alert-header-container');
+		checkContainer = document.querySelector('.check-container'),
+		launchContainer = document.querySelector('.launch-container'),
+		familyListContainer = document.querySelector('.family-list-container'),
+		alertContainer = document.querySelector('#alert-header-container');
 
+	var utilService = {
+		validateNewMember: function (newMember, memberList) {
+			var isValid = true,
+				foundMember = memberList.find(function (member) {
+					return member.name === newMember.name;
+				});
 
-function showAlert(classes, message, timer) {
-	alertContainer.className = classes.join(' ') + ' alert';
-	alertContainer.innerHTML = message;
-	alertContainer.classList.remove('hidden');
+			if (foundMember
+				|| newMember.name === ''
+				|| (!newMember.isSingle && (newMember.partner === '' || newMember.partner === undefined))) {
+				isValid = false;
+			}
 
-	setTimeout(function () {
-		alertContainer.classList.add('hidden');
-		alertContainer.innerHTML = '';
-	}, timer || 2000)
-}
+			return isValid;
+		},
+		matchingPartner: function (newMember, memberList) {
 
-function onTogglePartner() {
-	partnerNameInput.classList.toggle("hidden");
-}
+			var newList = JSON.parse(JSON.stringify(memberList));
 
-function validateNewMember(name, isSingle, partnerName) {
-	var isValid = true;
-
-	if (name.toString().trim() === '' || (!isSingle && partnerName.toString().trim() === '')) {
-		isValid = false;
-	}
-
-	familyMembers.map(function (member) {
-		if (member.name === name) {
-			isValid = false;
-		}
-	});
-
-	return isValid;
-}
-
-function getPartner(member) {
-	return ' in a relationship with ' + member.partner;
-}
-
-function updateList() {
-	var familyList = [];
-	familyMembers.map(function (member) {
-		var partner = member.isSingle ? '' : getPartner(member);
-		familyList.push('<li>' + member.name + partner + '</li>')
-	});
-
-	familyListContainer.innerHTML = familyList.join('');
-}
-
-function onSeeListClicked() {
-	familyListContainer.classList.toggle("hidden");
-
-	if (familyListContainer.classList.contains('hidden')) {
-		seeListButton.innerHTML = 'See the list';
-		return;
-	}
-
-	updateList();
-	seeListButton.innerHTML = 'Hide the list';
-}
-
-function onResetListClicked() {
-	familyMembers = [];
-	seeListButton.classList.toggle("hidden");
-	resetListButton.classList.toggle("hidden");
-	launchContainer.classList.add("hidden");
-	checkContainer.classList.add("hidden");
-	pickedPersonText.innerHTML = '';
-	nameDrawSelect.innerHTML = '';
-	updateList();
-}
-
-function onAddMember() {
-	var name = nameInput.value,
-		isSingle = isSingleCheckbox.checked,
-		partnerName = partnerNameInput.value,
-
-		isValid = validateNewMember(name, isSingle, partnerName);
-
-	if (isValid) {
-		familyMembers.push({
-			name: name,
-			isSingle: isSingle,
-			partner: isSingle ? '' : partnerName
-		});
-
-		if (!isSingle) {
-
-			var partner = familyMembers.find(function (member) {
-				return member.name.toLowerCase() === partnerName.toLowerCase()
+			var foundPartner = newList.find(function (member) {
+				return member.name.toLowerCase() === newMember.partner.toLowerCase()
 			});
 
-			if (partner) {
-				partner.isSingle = false;
-				partner.partner = name;
-			} else {
-				familyMembers.push({
-					name: partnerName,
-					isSingle: false,
-					partner: name
-				});
+			if (foundPartner) {
+				newList.splice(newList.indexOf(foundPartner), 1)
+			}
+
+			newList.push({
+				name: newMember.partner,
+				isSingle: false,
+				partner: newMember.name
+			});
+
+			return newList;
+		},
+		getUpdatedList: function (memberList) {
+			var familyList = [];
+
+			memberList.map(function (member) {
+				var partner = member.isSingle ? '' : ' in a relationship with ' + member.partner;
+				familyList.push('<li>' + member.name + partner + '</li>')
+			});
+
+			return familyList;
+		},
+		getDrawLists: function (memberList) {
+			function getPickedMemberName(searchList, pickerMember) {
+				var pickedName = '', counter = 0;
+
+				while (pickedName === '') {
+					if(counter === searchList.length) {
+						pickedName =  'There was no possibility to pick someone... Sorry!';
+					} else {
+						var potentialMember = searchList[counter];
+
+						if (pickerMember.name.toLowerCase() !== potentialMember.name.toLowerCase()
+							&& pickerMember.partner.toLowerCase() !== potentialMember.name.toLowerCase()) {
+
+							pickedName = potentialMember.name;
+							searchList.splice(searchList.indexOf(potentialMember), 1);
+						}
+						counter++;
+					}
+				}
+
+				return pickedName;
+			}
+
+			var htmlList = [],
+				searchList = JSON.parse(JSON.stringify(memberList)).reverse();
+
+			memberList.map(function (member) {
+				member.pickedMember = getPickedMemberName(searchList, member);
+				htmlList.push('<option value="' + member.pickedMember + '">' + member.name + '</option>');
+			});
+
+			return {
+				drewList: memberList,
+				htmlList: htmlList
 			}
 		}
+	};
 
-		nameInput.value = '';
-		partnerNameInput.value = '';
-	} else {
-		var message = 'The name ' + name + ' is already registered or not valid';
-		showAlert(['alert-warning'], message);
-	}
-
-	if (familyMembers.length > 0) {
-		seeListButton.classList.remove("hidden");
-		resetListButton.classList.remove("hidden");
-		updateList();
-	}
-
-	if (familyMembers.length > 1) {
-		launchContainer.classList.remove("hidden");
-	}
-}
-
-function clearDraw() {
-	familyMembers = familyMembers.map(function (member) {
-		var newMember = member;
-		newMember.isPicked = false;
-		newMember.pickedMember = undefined;
-		return newMember;
-	});
-
-	pickedPersonText.innerHTML = '';
-	nameDrawSelect.innerHTML = '';
-}
-
-function getPickedMember(pickerMember) {
-	//could have removed of a list instead of filter every time the whole list
-	var nonPickedMembers = familyMembers.filter(function (member) {
-
-		// check if it is not picked already, to not pick his own name, and the partner name.
-		if (!member.isPicked && pickerMember.name.toLowerCase() !== member.name.toLowerCase()
-			&& pickerMember.partner.toLowerCase() !== member.name.toLowerCase()) {
-			// to keep the circle going, we need to not create pairs (only for lists of 2 persons)
-			return !(familyMembers.length > 2 && member.pickedMember && pickerMember.name.toLowerCase() === member.pickedMember.name);
-		}
-
-		return false;
-	});
-
-
-	if (nonPickedMembers.length) {
-		var randomNum = Math.floor(Math.random() * nonPickedMembers.length);
-		nonPickedMembers[randomNum].isPicked = true;
-		return nonPickedMembers[randomNum];
-	} else {
-		return null;
-	}
-}
-
-function onLaunchDraw() {
-	clearDraw();
-	var selectList = [];
-
-	for (var i = 0; i < familyMembers.length; i++) {
-		var member = familyMembers[i],
-			pickedMember = getPickedMember(member);
-		if (pickedMember) {
-			member.pickedMember = pickedMember;
-		} else {
-			member.pickedMember = {name: 'There was no possibility to pick someone... Sorry!'};
-		}
-	}
-
-	familyMembers.map(function (member) {
-		selectList.push('<option value="' + member.pickedMember.name + '">' + member.name + '</option>');
-	});
-
-	showAlert(['alert-success'], 'The draw was launched with success!', 4000);
-
-	checkContainer.classList.remove("hidden");
-	nameDrawSelect.innerHTML = selectList.join('');
-}
-
-function checkPickedPerson() {
-	pickedPersonText.innerHTML = 'The person that you have picked is: <b>' + nameDrawSelect.value + '</b>';
-
-	setTimeout(function () {
+	function clearDraw() {
 		pickedPersonText.innerHTML = '';
-	}, 5000)
-}
+		nameDrawSelect.innerHTML = '';
+	}
 
-function onChangeNameSelected() {
-	pickedPersonText.innerHTML = '';
+	function showAlert(classes, message, timer) {
+		if(alertTimeOut) clearTimeout(alertTimeOut);
+
+		alertContainer.className = classes.join(' ') + ' alert';
+		alertContainer.innerHTML = message;
+		alertContainer.classList.remove('hidden');
+
+		alertTimeOut = setTimeout(function () {
+			alertContainer.classList.add('hidden');
+			alertContainer.innerHTML = '';
+		}, timer || 2000)
+	}
+
+	function createNewMember() {
+		var name = nameInput.value.toString().trim() || '',
+			isSingle = isSingleCheckbox.checked,
+			partner = isSingle ? '' : partnerNameInput.value.toString().trim() || '';
+
+		return {
+			name: name,
+			isSingle: isSingle,
+			partner: partner
+		}
+	}
+
+	Object.assign(this, {
+		onAddMember: function onAddMember() {
+			var newMember = createNewMember(),
+				isValid = utilService.validateNewMember(newMember, familyMembers);
+
+			if (isValid) {
+				familyMembers.push(newMember);
+
+				if (!newMember.isSingle) {
+					familyMembers = utilService.matchingPartner(newMember, familyMembers)
+				}
+
+				nameInput.value = '';
+				partnerNameInput.value = '';
+			} else {
+				showAlert(['alert-warning'], 'The name ' + newMember.name + ' is already registered or not valid');
+			}
+
+			if (familyMembers.length > 0) {
+				seeListButton.classList.remove("hidden");
+				resetListButton.classList.remove("hidden");
+				familyListContainer.innerHTML = utilService.getUpdatedList(familyMembers).join('');
+			}
+
+			if (familyMembers.length > 1) {
+				launchContainer.classList.remove("hidden");
+			}
+		},
+		onTogglePartner: function onTogglePartner() {
+			partnerNameInput.classList.toggle("hidden");
+		},
+		onChangeNameSelected: function onChangeNameSelected() {
+			pickedPersonText.innerHTML = '';
+		},
+		onCheckPickedPerson: function onCheckPickedPerson() {
+			pickedPersonText.innerHTML = 'The person that you have picked is: <b>' + nameDrawSelect.value + '</b>';
+
+			if(resultTimeOut) clearTimeout(resultTimeOut);
+
+			resultTimeOut = setTimeout(function () {
+				pickedPersonText.innerHTML = '';
+			}, 5000)
+		},
+		onLaunchDraw: function onLaunchDraw() {
+			clearDraw();
+
+			var newList = JSON.parse(JSON.stringify(familyMembers)),
+				drewLists = utilService.getDrawLists(newList);
+
+			checkContainer.classList.remove("hidden");
+			nameDrawSelect.innerHTML = drewLists.htmlList.join('');
+
+			showAlert(['alert-success'], 'The draw was launched with success!', 4000);
+		},
+		onSeeList: function onSeeList() {
+			familyListContainer.classList.toggle("hidden");
+
+			if (familyListContainer.classList.contains('hidden')) {
+				seeListButton.innerHTML = 'See the list';
+				return;
+			}
+
+			seeListButton.innerHTML = 'Hide the list';
+		},
+		onResetList: function onResetList() {
+			familyMembers = [];
+			seeListButton.classList.toggle("hidden");
+			resetListButton.classList.toggle("hidden");
+			launchContainer.classList.add("hidden");
+			checkContainer.classList.add("hidden");
+			pickedPersonText.innerHTML = '';
+			nameDrawSelect.innerHTML = '';
+			familyListContainer.innerHTML = utilService.getUpdatedList(familyMembers).join('');
+		},
+		utilService: utilService
+	});
 }
+$(document).ready(onLoad);
+
+

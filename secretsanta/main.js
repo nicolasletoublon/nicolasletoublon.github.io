@@ -45,7 +45,7 @@ function validateNewMember(name, isSingle, partnerName) {
 }
 
 function getPartner(member) {
-	return ' in couple with ' + member.partner;
+	return ' in a relationship with ' + member.partner;
 }
 
 function updateList() {
@@ -94,6 +94,14 @@ function onAddMember() {
 			isSingle: isSingle,
 			partner: isSingle ? '' : partnerName
 		});
+
+		if(!isSingle) {
+			familyMembers.push({
+				name: partnerName,
+				isSingle: false,
+				partner: name
+			});
+		}
 
 		nameInput.value = '';
 		partnerNameInput.value = '';

@@ -95,12 +95,22 @@ function onAddMember() {
 			partner: isSingle ? '' : partnerName
 		});
 
-		if(!isSingle) {
-			familyMembers.push({
-				name: partnerName,
-				isSingle: false,
-				partner: name
+		if (!isSingle) {
+
+			var partner = familyMembers.find(function (member) {
+				return member.name.toLowerCase() === partnerName.toLowerCase()
 			});
+
+			if (partner) {
+				partner.isSingle = false;
+				partner.partner = name;
+			} else {
+				familyMembers.push({
+					name: partnerName,
+					isSingle: false,
+					partner: name
+				});
+			}
 		}
 
 		nameInput.value = '';

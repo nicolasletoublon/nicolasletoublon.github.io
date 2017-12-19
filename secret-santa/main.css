@@ -1,0 +1,27 @@
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+#alert-header-container {
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    left: 0;
+    top: 0;
+}
+
+.family-list-container {
+    list-style-type: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+#picked-person-text {
+    margin-top: 10px;
+}

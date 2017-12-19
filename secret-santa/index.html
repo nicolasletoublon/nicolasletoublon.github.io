@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <title>Secret Santa Brault</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body class="container">
+<div class="alert hidden" id="alert-header-container" role="alert"></div>
+<header>
+    <h1>Secret Santa for the Brault Family!</h1>
+    <br/>
+    <br/>
+</header>
+<section class="main-section">
+    <div class="add-container">
+        <h3>1. Add a new family member</h3>
+        <div class="form-group">
+            <input id="name-member-input" type="text" class="form-control" placeholder="Enter your name..."/>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input id="member-is-single-checkbox" type="checkbox" checked="true" onchange="onTogglePartner()"
+                       class="form-check-input">
+                I am single
+            </label>
+        </div>
+        <div class="form-group">
+            <input id="partner-name-member-input" type="text" class="form-control hidden"
+                   placeholder="Enter your partner name..."
+            />
+        </div>
+        <button id="add-member-button" type="button" onclick="onAddMember()" class="btn btn-primary form-group">Add</button>
+        <div class="form-group">
+            <button id="see-list-button" onclick="onSeeListClicked()" type="button" class="btn btn-primary hidden">See the list</button>
+            <button id="reset-list-button" onclick="onResetListClicked()" type="button" class="btn btn-warning hidden">Reset the list</button>
+            <br/>
+            <ul class="family-list-container hidden"></ul>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="launch-container hidden">
+        <h3>2. Launch the draw</h3>
+        <button type="button" class="btn btn-primary" onclick="onLaunchDraw()">Launch</button>
+    </div>
+    <br/>
+    <br/>
+    <div class="check-container hidden">
+        <h3>3. Check your personal draw</h3>
+        <div class="form-group">
+            <label for="select-name-draw">Select your name</label>
+            <select class="form-control" id="select-name-draw" onchange="onChangeNameSelected()"></select>
+            <p id="picked-person-text"></p>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="checkPickedPerson()">Check</button>
+    </div>
+</section>
+<footer>
+
+</footer>
+<script src="main.js"></script>
+
+</body>
+</html>
